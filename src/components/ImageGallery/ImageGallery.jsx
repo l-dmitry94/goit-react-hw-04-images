@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import fetchImages from 'services/pixabay-api';
 import ImageGalleryItem from './ImageGalleryItem';
 import { GalleryList } from './ImageGallery.styled';
-import Searchbar from 'components/Searchbar';
 
 const perPage = 12;
 
