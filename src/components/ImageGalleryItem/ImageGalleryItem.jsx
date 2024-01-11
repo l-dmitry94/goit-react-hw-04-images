@@ -1,8 +1,8 @@
 import { GalleryItem, GalleryItemImage } from './ImageGalleryItem.styled';
 
-const ImageGalleryItem = ({ smallImage, largeImage, tags }) => {
+const ImageGalleryItem = ({ smallImage, largeImage, tags, onShowModal }) => {
     return (
-        <GalleryItem>
+        <GalleryItem onClick={() => onShowModal(largeImage, tags)}>
             <GalleryItemImage src={smallImage} alt={tags} loading="lazy" />
         </GalleryItem>
     );

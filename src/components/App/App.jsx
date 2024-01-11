@@ -10,6 +10,7 @@ import {
 import Searchbar from 'components/Searchbar';
 import fetchImages from 'services/pixabay-api';
 import ImageGalleryItem from 'components/ImageGalleryItem';
+import Modal from 'components/Modal';
 
 const App = () => {
     const [query, setQuery] = useState('');
@@ -17,6 +18,8 @@ const App = () => {
     const [page, setPage] = useState(41);
     const [isLoading, setIsLoading] = useState(false);
     const [isShowLoadMore, setIsShowLoadMore] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [imageModal, setimageModal] = useState({});
 
     useEffect(() => {
         if (!query) {
@@ -31,7 +34,7 @@ const App = () => {
                 setIsShowLoadMore(page < Math.ceil(data.totalHits / 12));
                 setImages(prevImages => [...prevImages, ...data.hits]);
             } catch (error) {
-                console.log(error)
+                console.log(error);
             } finally {
                 setIsLoading(false);
             }
@@ -54,6 +57,16 @@ const App = () => {
         setImages([]);
     };
 
+    const onShowModal = (largeImage, tags) => {
+        setShowModal(true);
+        setimageModal({ largeImage, tags });
+    };
+
+    const onCloseModal = () => {
+        setShowModal(false);
+        setimageModal({});
+    };
+
     const elements = images.map(
         ({ webformatURL, largeImageURL, tags }, index) => (
             <ImageGalleryItem
@@ -61,6 +74,7 @@ const App = () => {
                 smallImage={webformatURL}
                 largeImage={largeImageURL}
                 tags={tags}
+                onShowModal={onShowModal}
             />
         )
     );
@@ -95,6 +109,11 @@ const App = () => {
                         load more
                     </LoadMoreButton>
                 </LoadMoreButtonWrapper>
+            )}
+            {showModal && (
+                <Modal closeModal={onCloseModal}>
+                    <img src={imageModal.largeImage} alt={imageModal.tags} />
+                </Modal>
             )}
         </Wrapper>
     );
