@@ -11,8 +11,6 @@ import Searchbar from 'components/Searchbar';
 import fetchImages from 'services/pixabay-api';
 import ImageGalleryItem from 'components/ImageGalleryItem';
 
-const perPage = 12;
-
 const App = () => {
     const [query, setQuery] = useState('');
     const [images, setImages] = useState([]);
@@ -29,13 +27,13 @@ const App = () => {
 
         const fetchImagesData = async () => {
             try {
-                const data = await fetchImages(query, page, perPage);
-                setIsShowLoadMore(data.hits.length === perPage)
+                const data = await fetchImages(query, page);
+                setIsShowLoadMore(page < Math.ceil(data.totalHits / 12));
                 setImages(prevImages => [...prevImages, ...data.hits]);
             } catch (error) {
-                
+                console.log(error)
             } finally {
-                setIsLoading(false)
+                setIsLoading(false);
             }
         };
 
@@ -52,7 +50,7 @@ const App = () => {
         }
 
         setQuery(query.search.toLowerCase());
-        // setPage(1);
+        setPage(1);
         setImages([]);
     };
 
@@ -79,7 +77,13 @@ const App = () => {
                         color="#4fa94d"
                         radius="9"
                         ariaLabel="three-dots-loading"
-                        wrapperStyle={{position: "absolute", top: "50%", left: "50%", zIndex: 100, transform: "translate(-50%, -50%)"}}
+                        wrapperStyle={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            zIndex: 100,
+                            transform: 'translate(-50%, -50%)',
+                        }}
                         wrapperClass="loader"
                     />
                 </WrapperLoader>
