@@ -1,9 +1,9 @@
 import { GalleryItem, GalleryItemImage } from './ImageGalleryItem.styled';
 
-const ImageGalleryItem = ({ smallImage, largeImage }) => {
+const ImageGalleryItem = ({ smallImage, largeImage, tags }) => {
     return (
         <GalleryItem>
-            <GalleryItemImage src={smallImage} alt="" loading="lazy" />
+            <GalleryItemImage src={smallImage} alt={tags} loading="lazy" />
         </GalleryItem>
     );
 };
