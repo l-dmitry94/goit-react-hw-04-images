@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
 import { ThreeDots } from 'react-loader-spinner';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 import {
     GalleryList,
+    Image,
     LoadMoreButton,
     LoadMoreButtonWrapper,
     Wrapper,
@@ -31,6 +34,9 @@ const App = () => {
         const fetchImagesData = async () => {
             try {
                 const data = await fetchImages(query, page);
+                if (!data.hits.length) {
+                    toast.error('Таких изображений не найдено');
+                }
                 setIsShowLoadMore(page < Math.ceil(data.totalHits / 12));
                 setImages(prevImages => [...prevImages, ...data.hits]);
             } catch (error) {
@@ -47,14 +53,22 @@ const App = () => {
         setPage(prevPage => prevPage + 1);
     };
 
-    const handleSubmit = query => {
-        if (!query.search) {
+    const handleSubmit = queryForm => {
+        const normalizeQueryForm = queryForm.toLowerCase();
+
+        if (!normalizeQueryForm) {
+            toast.warn('Ви не ввели запит');
             return;
         }
 
-        setQuery(query.search.toLowerCase());
-        setPage(1);
+        if (normalizeQueryForm === query) {
+            toast.warn('Ви вже проглядаєте цей запит');
+            return;
+        }
+
         setImages([]);
+        setPage(1);
+        setQuery(normalizeQueryForm);
     };
 
     const onShowModal = (largeImage, tags) => {
@@ -112,9 +126,11 @@ const App = () => {
             )}
             {showModal && (
                 <Modal closeModal={onCloseModal}>
-                    <img src={imageModal.largeImage} alt={imageModal.tags} />
+                    <Image src={imageModal.largeImage} alt={imageModal.tags} />
                 </Modal>
             )}
+
+            <ToastContainer autoClose={3000} />
         </Wrapper>
     );
 };

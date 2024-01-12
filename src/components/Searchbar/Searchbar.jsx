@@ -8,9 +8,10 @@ const Searchbar = ({ onSubmit }) => {
         initialValues: {
             search: '',
         },
-        onSubmit: async (values, { setSubmitting }) => {
-            onSubmit(values);
-            setSubmitting(false);
+        onSubmit: async (values, { setSubmitting, resetForm }) => {
+            onSubmit(values.search);
+            setSubmitting(true);
+            resetForm();
         },
     });
 

@@ -60,5 +60,9 @@ export const WrapperLoader = styled.div`
     transform: translate(-50%, -50%);
     z-index: 100;
     background-color: rgba(0, 0, 0, .8);
-    transition: all .5s linear
+    transition: all .5s linear;
 `;
+
+export const Image = styled.img`
+    width: 800px
+`
